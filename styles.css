@@ -10,7 +10,6 @@
   --fc-card-radius: var(--radius-m);
   --fc-card-pad: var(--size-4-3);
   --fc-card-shadow: none;
-  --fc-card-accent: none;
 
   --fc-title-font: inherit;
   --fc-title-size: var(--font-ui-medium);
@@ -51,16 +50,19 @@
   align-items: start;
 }
 
-/* Masonry via CSS columns: each card keeps its natural height and the columns stay balanced. Cards must not break across a column. */
+/* Masonry: main.js deals cards into these columns, each card into the shortest one, so each card keeps its natural height and the order reads left to right. CSS `columns` would fill top to bottom instead. */
 .flex-cards.is-masonry .flex-cards-grid {
-  display: block;
-  columns: var(--fc-width);
-  column-gap: var(--fc-gap);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--fc-gap);
 }
 
-.flex-cards.is-masonry .flex-cards-card {
-  break-inside: avoid;
-  margin-bottom: var(--fc-gap);
+.flex-cards-column {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fc-gap);
 }
 
 .flex-cards-card {
@@ -231,5 +233,69 @@
   --fc-card-pad: var(--size-4-4);
   --fc-label-color: var(--text-muted);
   --fc-label-weight: var(--font-semibold);
-  --fc-title-color: var(--text-accent);
+  --fc-title-color: var(--color-accent-1);
+  --fc-title-size: var(--font-ui-small);
+}
+
+/* Second group level and the group checkbox panel. */
+.flex-cards-filter {
+  margin-bottom: var(--size-4-2);
+  font-size: var(--font-ui-small);
+}
+
+.flex-cards-filter > summary {
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.flex-cards-filter-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--size-4-6);
+  padding: var(--size-4-2) 0;
+}
+
+.flex-cards-filter-level {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-2-1);
+  min-width: 160px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.flex-cards-filter-head {
+  display: flex;
+  gap: var(--size-4-2);
+  align-items: baseline;
+  color: var(--text-muted);
+  font-weight: var(--font-semibold);
+}
+
+.flex-cards-filter-bulk {
+  font-size: var(--font-smallest);
+  font-weight: normal;
+}
+
+.flex-cards-filter-item {
+  display: flex;
+  gap: var(--size-4-2);
+  align-items: center;
+  cursor: pointer;
+}
+
+.flex-cards-filter-count {
+  margin-left: auto;
+  color: var(--text-faint);
+  font-size: var(--font-smallest);
+}
+
+.flex-cards-filter-missing {
+  color: var(--text-error);
+  padding-top: var(--size-4-1);
+}
+
+/* Hidden properties stay in the card's DOM; `hidden` already does this, but a theme setting `display` on the value class must not bring them back. */
+.flex-cards-hidden {
+  display: none !important;
 }
